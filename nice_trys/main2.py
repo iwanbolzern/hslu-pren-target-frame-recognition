@@ -5,8 +5,9 @@
 #This program works on the Raspberry PI 2, Jessie, OpenCV 3.0.0
 
 import cv2
-import numpy as np                              #for template matching
-import imutils                                  #for template matching, "image processing convenience functions"  THIS IS A FUNCITON CALL!
+import numpy as np  # for template matching
+
+from utils import imutils
 
 cap = cv2.VideoCapture(0)  # Webcam Capture
 

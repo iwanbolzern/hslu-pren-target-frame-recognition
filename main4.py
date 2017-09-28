@@ -7,7 +7,7 @@ import cv2
 # image = cv2.imread('landing_field_2.jpg')
 
 
-cap = cv2.VideoCapture("IMG_1814.MOV")  # Webcam Capture
+cap = cv2.VideoCapture("high_res_slow.MOV")  # Webcam Capture
 
 while True:
     ret, roi_image = cap.read()

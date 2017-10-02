@@ -1,17 +1,29 @@
 # import the necessary packages
 import numpy as np
 import argparse
+
+from collections import defaultdict
+from sklearn.neighbors import NearestNeighbors
 import cv2
+from operator import itemgetter
+from typing import List, Tuple
 
 # load the image
 # image = cv2.imread('landing_field_2.jpg')
 
+# def convert_to_rectangles(contours):
+#     for contour in contours:
+#         rect = cv2.minAreaRect(contours)
+#         max(contours, key=lambda x: x)
 
-cap = cv2.VideoCapture("high_res_slow.MOV")  # Webcam Capture
+# Return a Tuple for all centers (contour, (x, y))
+
+
+cap = cv2.VideoCapture("test_movies/high_res_slow.MOV")  # Webcam Capture
 
 while True:
     ret, roi_image = cap.read()
-    #roi_image = cv2.imread("landing_field_2.jpg")
+    #roi_image = cv2.imread("test_images/landing_field_2.jpg")
 
     # convert the image to grayscale, blur it, and find edges
     # in the image
@@ -23,6 +35,9 @@ while True:
     # find contours in the edged image, keep only the largest
     # ones, and initialize our screen contour
     (im2, cnts, _) = cv2.findContours(edged.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    #centers = get_centers(cnts)
+    #get_n_closest_centers(centers, 4)
+
     cnts = sorted(cnts, key=cv2.contourArea, reverse=True)[:10]
     screenCnt = None
 
@@ -41,6 +56,6 @@ while True:
     if screenCnt is not None:
         #cv2.drawContours(roi_image, [screenCnt], -1, (0, 255, 0), 3)
         for c in cnts:
-            cv2.drawContours(roi_image, [c], -1, (0, 255, 0), 3)
-    cv2.imshow("Game Boy Screen", roi_image)
+            cv2.drawContours(gray, [c], -1, (0, 255, 0), 3)
+    cv2.imshow("Game Boy Screen", gray)
     cv2.waitKey(1)

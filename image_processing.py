@@ -1,3 +1,11 @@
+import cv2
+from collections import defaultdict
+
+from copy import deepcopy
+from sklearn.neighbors import NearestNeighbors
+from typing import Tuple
+
+
 def get_centers(cntrs):
     centers = []
     for cntr in cntrs:
@@ -7,25 +15,41 @@ def get_centers(cntrs):
     return centers
 
 def create_proportion_table(props):
-    mx = []
+    mx = [[] for _ in range(len(props))]
     for i in range(len(props)):
-        mx.append([])
-        for j in range(len(props)-1):
-            mx[i].append(props[j]/props[i])
+        for j in range(i + 1):
+            mx[j].append(props[i]/props[j])
     return mx
 
-prop_threashold = 5 # in precentages
-def get_prop_scores(mx, props):
-    score = defaultdict(0)
+def create_propotion_vec(areas):
+    if not areas:
+        raise ValueError("Areas do not have an entry")
+
+    areas_tmp = sorted(areas, reverse=True)
+    props = []
+    for i in range(len(areas_tmp)):
+        props.append(areas_tmp[i] / areas_tmp[0])
+
+    return props
+
+prop_threashold = 0.05 # in precentages
+def calc_prop_scores(mx, props):
+    score = defaultdict(lambda: 0)
     for i in range(len(mx)):
         k = 0
-        for j in range(len(props)):
+        for j in range(len(mx[i])):
             if mx[i][j] - prop_threashold <= props[k]\
                 <= mx[i][j] + prop_threashold:
                 score[i] += 1
                 k += 1
 
-    return s
+                # check if all proportions are already compared
+                if k >= len(props):
+                    break
+
+        score[i] -= 1 # it is -1 bc you always have a one value in front (high math)
+
+    return max(score.values())
 
 
 

@@ -3,54 +3,7 @@ from collections import defaultdict
 
 from copy import deepcopy
 from sklearn.neighbors import NearestNeighbors
-from typing import Tuple
-
-
-def get_centers(cntrs):
-    centers = []
-    for cntr in cntrs:
-        M = cv2.moments(cntr)
-        centers.append((cntr, (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))))
-
-    return centers
-
-def create_proportion_table(props):
-    mx = [[] for _ in range(len(props))]
-    for i in range(len(props)):
-        for j in range(i + 1):
-            mx[j].append(props[i]/props[j])
-    return mx
-
-def create_propotion_vec(areas):
-    if not areas:
-        raise ValueError("Areas do not have an entry")
-
-    areas_tmp = sorted(areas, reverse=True)
-    props = []
-    for i in range(len(areas_tmp)):
-        props.append(areas_tmp[i] / areas_tmp[0])
-
-    return props
-
-prop_threashold = 0.05 # in precentages
-def calc_prop_scores(mx, props):
-    score = defaultdict(lambda: 0)
-    for i in range(len(mx)):
-        k = 0
-        for j in range(len(mx[i])):
-            if mx[i][j] - prop_threashold <= props[k]\
-                <= mx[i][j] + prop_threashold:
-                score[i] += 1
-                k += 1
-
-                # check if all proportions are already compared
-                if k >= len(props):
-                    break
-
-        score[i] -= 1 # it is -1 bc you always have a one value in front (high math)
-
-    return max(score.values())
-
+from typing import Tuple, List
 
 
 def get_n_neighbours_below_delta(centers: Tuple[int, int], n: int, threashold: float):
@@ -95,14 +48,3 @@ def are_vectors_equal(vec_one, vec_two, order_independent: bool=True):
             return False
 
     return True
-
-landing_field_proportions = [100, 74.8, 53.25, 35.35, 21.1, 10.52]
-proportion_tolerance = 5 # in percentages
-
-def does_cntrs_statisfy_proportions(cntrs, proportions):
-    areas = [(cv2.contourArea(cntr), cntr) for cntr in cntrs]
-    areas = sorted(areas)
-
-
-
-    return

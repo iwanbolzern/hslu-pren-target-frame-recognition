@@ -3,20 +3,27 @@ from typing import List
 
 from contour import Contour
 
-class PropotionHandler:
 
-    landing_field_proportions = [100, 74.8, 53.25, 35.35, 21.1, 10.52]
-    proportion_tolerance = 5 # in percentages
+class ProportionHandler:
 
-    def __init__(self):
+    def __init__(self, score_threshold: int, prop_threshold: float=0.05):
+        # degree in which the captured rectangle has to satisfy the theoretical rectangle proportions e.g. if the
+        # captured rectangle is 3% bigger than the theoretical optimum it is still accepted.
+        self.prop_threshold = prop_threshold
+
+        # how many circles has to satisfy condition
+        self.score_threshold = score_threshold
+
+        # create comparision proportion matrix
+        self.landing_field_proportions = [100, 74.8, 53.25, 35.35, 21.1, 10.52]
         self.mx = self._create_proportion_table(self.landing_field_proportions)
 
-    def does_cntrs_statisfy_proportions(cntrs: List[Contour]):
-        prop_vec = _create_propo
+    def does_contours_satisfy_proportions(self, contours: List[Contour]):
+        prop_vec = self._create_proportion_vec(contours)
+        score = self._calc_prop_scores(prop_vec)
+        return score >= self.score_threshold
 
-
-    @staticmethod
-    def _create_proportion_table(props: List[float]) -> List[List[float]]:
+    def _create_proportion_table(self, props: List[float]) -> List[List[float]]:
         """ Creates a matrix where you have all proportions to each other in it. Let me explain it with a example:
         Your Landing field has six circles with the areas [100, 80, 50, 40, 30, 25] from biggest to smallest. If you know
         get a selection of them e.g. [80, 40, 30] and you would like to know if they are possible proportions, you need
@@ -40,8 +47,7 @@ class PropotionHandler:
                 mx[j].append(props[i]/props[j])
         return mx
 
-    @staticmethod
-    def _create_propotion_vec(areas: List[float]) -> List[float]:
+    def _create_proportion_vec(self, areas: List[float]) -> List[float]:
         """ Calculates the proportions from the biggest area to all others. e.g. for a given area vector [100, 50, 30] the
         resulting vector would be [100 / 100, 50 / 100, 30 / 100] = [1, 0.5, 0.3]
         :param areas: Vector of area size
@@ -57,15 +63,13 @@ class PropotionHandler:
 
         return props
 
-    prop_threashold = 0.05 # in precentages
-    @staticmethod
-    def _calc_prop_scores(mx, props):
+    def _calc_prop_scores(self, props):
         score = defaultdict(lambda: 0)
-        for i in range(len(mx)):
+        for i in range(len(self.mx)):
             k = 0
-            for j in range(len(mx[i])):
-                if mx[i][j] - prop_threashold <= props[k]\
-                    <= mx[i][j] + prop_threashold:
+            for j in range(len(self.mx[i])):
+                if self.mx[i][j] - self.prop_threshold <= props[k] \
+                        <= self.mx[i][j] + self.prop_threshold:
                     score[i] += 1
                     k += 1
 

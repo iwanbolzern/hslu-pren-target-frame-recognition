@@ -1,7 +1,7 @@
 from collections import defaultdict
 from typing import List
 
-from contour import Contour
+from image_processing.contour import Contour
 
 
 class ProportionHandler:

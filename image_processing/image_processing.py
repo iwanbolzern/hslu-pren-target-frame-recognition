@@ -10,6 +10,40 @@ from typing import List, Tuple
 # load the image
 image = cv2.imread('landing_field_2.jpg')
 
+class Tree:
+
+    def __init__(self, cv2_presentation):
+        self.roots = None
+        self.flat = []
+        cv2_presentation = [[i] + cv2_presentation[i] for i in range(len(cv2_presentation))]
+        cv2_presentation = sorted(cv2_presentation, key=lambda x: x[3])
+
+        for cv2_node in cv2_presentation:
+            node = Node(cv2_node[0])
+
+
+
+
+class Node:
+
+    def __init__(self, index):
+        self.index = index
+        self._childes = {}
+        self._parent = None
+
+    @property
+    def parent(self):
+        return self._parent
+
+    @parent.setter
+    def parent(self, value):
+
+        self._parent = value
+
+    def add_child(self, child):
+        #if self._childes.co
+        self._childes[child.index] = child
+
 
 class ImageProcessing:
 
@@ -32,6 +66,8 @@ class ImageProcessing:
 
 
     def get_possible_contours(self, cntrs, hierarchy):
+        leaves = [leave for leave in hierarchy if leave[2] == -1]
+
         # return everyting between 3 and 6 contours in each other
         pass
 

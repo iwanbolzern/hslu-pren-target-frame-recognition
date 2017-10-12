@@ -1,11 +1,5 @@
-import numpy as np
-import argparse
 
-from collections import defaultdict
-from sklearn.neighbors import NearestNeighbors
 import cv2
-from operator import itemgetter
-from typing import List, Tuple
 
 # load the image
 image = cv2.imread('landing_field_2.jpg')

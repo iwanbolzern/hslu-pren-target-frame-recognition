@@ -49,7 +49,7 @@ class Tree:
         self._init_tree(cv2_presentation)
 
     def _init_tree(self, cv2_presentation):
-        cv2_presentation = [[i] + cv2_presentation[i] for i in range(len(cv2_presentation))]
+        cv2_presentation = [[i] + cv2_presentation[0][i].tolist() for i in range(len(cv2_presentation[0]))]
         cv2_presentation = sorted(cv2_presentation, key=lambda x: x[4])
 
         i = 0
@@ -82,5 +82,5 @@ class Tree:
     @property
     def leaves(self) -> List[Node]:
         if not self._leaves:
-            self._leaves = [leave for leave in self.flat if not leave.childes]
-        return []
+            self._leaves = [leave for key, leave in self.flat.items() if not leave.childes]
+        return self._leaves

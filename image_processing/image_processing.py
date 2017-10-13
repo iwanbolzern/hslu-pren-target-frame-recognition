@@ -1,5 +1,5 @@
 import numpy as np
-import argparse
+
 
 from collections import defaultdict
 from scipy import ndimage
@@ -21,7 +21,7 @@ image = cv2.imread('landing_field_2.jpg')
 class ImageProcessing:
 
     def __init__(self):
-        self.min_max_contours = Generic(min=3, max=9)
+        self.min_max_contours = Generic(min=3, max=5)
         self.grey_scale_image = None
         self.grey_blur_image = None
         self.black_white_image = None
@@ -30,6 +30,7 @@ class ImageProcessing:
 
     def process_image(self, image):
         # convert the image to grayscale, blur it
+        self.processed_image = image.copy()
         self.grey_scale_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         self.grey_blur_image = cv2.bilateralFilter(self.grey_scale_image, 11, 17, 17)
         ret, self.black_white_image = cv2.threshold(self.grey_blur_image, 150, 255, cv2.THRESH_BINARY)
@@ -37,23 +38,43 @@ class ImageProcessing:
         # find contours
         self.edged_image = cv2.Canny(self.black_white_image, 30, 200)
         # get all contours which are nested into each other. hierarchy  [Next, Previous, First_Child, Parent]
-        (im2, contours, hierarchy) = cv2.findContours(self.edged_image.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        (im2, contours, hierarchy) = cv2.findContours(self.black_white_image.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         contours = [Contour(contour) for contour in contours]
         possible_contours = self.get_possible_contours(contours, hierarchy)
 
         proportion_handler = ProportionHandler(4)
         for contours in possible_contours:
+            # Debug
+            #self.processed_image = image.copy()
+            #for c in contours:
+            #    cv2.drawContours(self.processed_image, [c.points], -1, (0, 255, 0), 3)
+            #cv2.imshow("Processed Image", self.processed_image)
+            #cv2.waitKey(1)
+            # end Debug
+
             satisfy = proportion_handler.does_contours_satisfy_proportions(contours)
             if satisfy:
                 # calc and draw point
-                center = ndimage.measurements.center_of_mass(np.array(contour.center for contour in contours))
-                self.processed_image = image.copy()
-                cv2.Circle(self.processed_image, center, 3, (0, 255, 0), thickness=1, lineType=8, shift=0)
+                x = [contour.center[0] for contour in contours]
+                y = [contour.center[1] for contour in contours]
+                centroid = (int(sum(x) / len(contours)), int(sum(y) / len(contours)))
+
+                cv2.circle(self.processed_image, centroid, 3, (255, 0, 0), thickness=1, lineType=8, shift=0)
 
                 for c in contours:
-                    cv2.drawContours(self.processed_image, [c], -1, (0, 255, 0), 3)
+                    cv2.drawContours(self.processed_image, [c.points], -1, (0, 255, 0), 3)
+                    cv2.circle(self.processed_image, c.center, 3, (0, 0, 255), thickness=1, lineType=8, shift=0)
 
-                return True, center
+                return True, centroid
+
+        # Debug
+        #for contours in possible_contours:
+        #    self.processed_image = image.copy()
+        #    for c in contours:
+        #        cv2.drawContours(self.processed_image, [c.points], -1, (0, 255, 0), 3)
+        #    cv2.imshow("Processed Image", self.processed_image)
+        #    cv2.waitKey(0)
+        # end Debug
 
         return False, None
 
@@ -72,16 +93,39 @@ class ImageProcessing:
         for leave in tree.leaves:
             parents, has_more = leave.get_n_parents(self.min_max_contours.max)
             if len(parents) >= self.min_max_contours.min: # check if there are enough contours in each other
-                possible_contours.append([cntrs[parent.index] for parent in parents])
+                possible_contours.append([cntrs[leave.index]] + [cntrs[parent.index] for parent in parents])
 
                 # check if there are more contours in each other
                 cur_leave = leave
                 while has_more:
                     cur_leave = cur_leave.parent
                     parents, has_more = cur_leave.get_n_parents(self.min_max_contours.max)
-                    possible_contours.append([cntrs[parent.index] for parent in parents])
+                    possible_contours.append([cntrs[cur_leave.index]] + [cntrs[parent.index] for parent in parents])
 
         return possible_contours
+
+    def show_all_images(self):
+        tmp_img_row1 = np.concatenate((cv2.cvtColor(self.grey_scale_image, cv2.COLOR_GRAY2RGB),
+                                       cv2.cvtColor(self.grey_blur_image, cv2.COLOR_GRAY2RGB)), axis=1)
+        tmp_img_row1 = np.concatenate((tmp_img_row1,
+                                       cv2.cvtColor(self.black_white_image, cv2.COLOR_GRAY2RGB)), axis=1)
+        tmp_img_row2 = np.concatenate((cv2.cvtColor(self.edged_image, cv2.COLOR_GRAY2RGB),
+                                       self.processed_image), axis=1)
+
+        new_shape = tmp_img_row1.shape
+        shape_diff = np.array(new_shape) - np.array(tmp_img_row2.shape)
+        tmp_img_row2 = np.lib.pad(tmp_img_row2, ((0, shape_diff[0]), (0, shape_diff[1]), (0, shape_diff[2])),
+                           'constant', constant_values=(0))
+
+        tmp_img = np.concatenate((tmp_img_row1, tmp_img_row2), axis=0)
+        cv2.imshow("Debug Window", cv2.resize(tmp_img, (1200, 800)))
+
+        # cv2.imshow('Grey Scale Image', self.grey_scale_image)
+        # cv2.imshow('Grey Blur Image', self.grey_blur_image)
+        # cv2.imshow('Black White Image', self.black_white_image)
+        # cv2.imshow('Edged Image', self.edged_image)
+        cv2.imshow('Prozessed Image', self.processed_image)
+
 
 
  # while True:

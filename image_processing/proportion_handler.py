@@ -19,7 +19,7 @@ class ProportionHandler:
         self.mx = self._create_proportion_table(self.landing_field_proportions)
 
     def does_contours_satisfy_proportions(self, contours: List[Contour]):
-        prop_vec = self._create_proportion_vec(contours)
+        prop_vec = self._create_proportion_vec([contour.area for contour in contours])
         score = self._calc_prop_scores(prop_vec)
         return score >= self.score_threshold
 

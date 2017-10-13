@@ -6,7 +6,7 @@ from sklearn.neighbors import NearestNeighbors
 from typing import Tuple, List
 
 
-def get_n_neighbours_below_delta(centers: Tuple[int, int], n: int, threshold: float):
+def get_n_neighbours_below_delta(centers: List[Tuple[int, int]], n: int, threshold: float):
     """ Returns all n points which are closer than a threshold to each other
     :param centers: Tuple with x and y value
     :param n: how many points have to be close to statisfy the threshold

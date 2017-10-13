@@ -2,7 +2,7 @@ import unittest
 import image_processing
 
 
-class ImageUtilTest(unittest.TestCase):
+class ProportionHandlerTest(unittest.TestCase):
     def setUp(self):
         pass
 

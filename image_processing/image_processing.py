@@ -23,20 +23,16 @@ class ImageProcessing:
     def __init__(self):
         self.min_max_contours = Generic(min=3, max=5)
         self.grey_scale_image = None
-        self.grey_blur_image = None
         self.black_white_image = None
-        self.edged_image = None
         self.processed_image = None
 
     def process_image(self, image):
         # convert the image to grayscale, blur it
         self.processed_image = image.copy()
         self.grey_scale_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        self.grey_blur_image = cv2.bilateralFilter(self.grey_scale_image, 11, 17, 17)
-        ret, self.black_white_image = cv2.threshold(self.grey_blur_image, 150, 255, cv2.THRESH_BINARY)
+        self.black_white_image = cv2.adaptiveThreshold(self.grey_scale_image, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 101, 7)
 
         # find contours
-        self.edged_image = cv2.Canny(self.black_white_image, 30, 200)
         # get all contours which are nested into each other. hierarchy  [Next, Previous, First_Child, Parent]
         (im2, contours, hierarchy) = cv2.findContours(self.black_white_image.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         contours = [Contour(contour) for contour in contours]
@@ -116,51 +112,20 @@ class ImageProcessing:
         return possible_contours
 
     def show_all_images(self):
-        # tmp_img_row1 = np.concatenate((cv2.cvtColor(self.grey_scale_image, cv2.COLOR_GRAY2RGB),
-        #                                cv2.cvtColor(self.grey_blur_image, cv2.COLOR_GRAY2RGB)), axis=1)
-        # tmp_img_row1 = np.concatenate((tmp_img_row1,
-        #                                cv2.cvtColor(self.black_white_image, cv2.COLOR_GRAY2RGB)), axis=1)
-        # tmp_img_row2 = np.concatenate((cv2.cvtColor(self.edged_image, cv2.COLOR_GRAY2RGB),
-        #                                self.processed_image), axis=1)
-        #
-        # new_shape = tmp_img_row1.shape
-        # shape_diff = np.array(new_shape) - np.array(tmp_img_row2.shape)
-        # tmp_img_row2 = np.lib.pad(tmp_img_row2, ((0, shape_diff[0]), (0, shape_diff[1]), (0, shape_diff[2])),
-        #                    'constant', constant_values=(0))
-        #
-        # tmp_img = np.concatenate((tmp_img_row1, tmp_img_row2), axis=0)
-        #cv2.imshow("Debug Window", cv2.resize(tmp_img, (1200, 800)))
+        tmp_img_row1 = np.concatenate((cv2.cvtColor(self.grey_scale_image, cv2.COLOR_GRAY2RGB),
+                                       cv2.cvtColor(self.black_white_image, cv2.COLOR_GRAY2RGB)), axis=1)
+        tmp_img_row2 = self.processed_image
+
+        new_shape = tmp_img_row1.shape
+        shape_diff = np.array(new_shape) - np.array(tmp_img_row2.shape)
+        tmp_img_row2 = np.lib.pad(tmp_img_row2, ((0, shape_diff[0]), (0, shape_diff[1]), (0, shape_diff[2])),
+                           'constant', constant_values=(0))
+
+        tmp_img = np.concatenate((tmp_img_row1, tmp_img_row2), axis=0)
+        cv2.imshow("Debug Window", cv2.resize(tmp_img, (1200, 800)))
 
         # cv2.imshow('Grey Scale Image', self.grey_scale_image)
         # cv2.imshow('Grey Blur Image', self.grey_blur_image)
         # cv2.imshow('Black White Image', self.black_white_image)
         # cv2.imshow('Edged Image', self.edged_image)
         cv2.imshow('Prozessed Image', self.processed_image)
-
-
-
- # while True:
- #     ret, roi_image = cap.read()
- #     #roi_image = cv2.imread("test_images/landing_field_2.jpg")
- #
- #
- #
- #     # find contours in the edged image, keep only the largest
- #     # ones, and initialize our screen contour
- #
- #     #centers = get_centers(cnts)
- #     #get_n_closest_centers(centers, 4)
- #
- #     cnts = sorted(cnts, key=cv2.contourArea, reverse=True)[:10]
- #     screenCnt = None
- #
- #     # loop over our contours
- #     for c in cnts:
- #
- #     gray = cv2.cvtColor(gray, cv2.COLOR_GRAY2RGB)
- #     if screenCnt is not None:
- #         #cv2.drawContours(roi_image, [screenCnt], -1, (0, 255, 0), 3)
- #         for c in cnts:
- #             cv2.drawContours(gray, [c], -1, (0, 255, 0), 3)
- #     cv2.imshow("Game Boy Screen", gray)
- #     cv2.waitKey(1)

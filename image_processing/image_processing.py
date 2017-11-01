@@ -40,16 +40,24 @@ class ImageProcessing:
         # get all contours which are nested into each other. hierarchy  [Next, Previous, First_Child, Parent]
         (im2, contours, hierarchy) = cv2.findContours(self.black_white_image.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         contours = [Contour(contour) for contour in contours]
+        # Debug
+        self.processed_image = image.copy()
+        for c in contours:
+            cv2.drawContours(self.processed_image, [c.points], -1, (0, 255, 0), 3)
+        cv2.imshow("All contours Image", self.processed_image)
+        cv2.waitKey(1)
+        # end Debug
+
         possible_contours = self.get_possible_contours(contours, hierarchy)
 
         proportion_handler = ProportionHandler(4)
         for contours in possible_contours:
             # Debug
-            #self.processed_image = image.copy()
-            #for c in contours:
-            #    cv2.drawContours(self.processed_image, [c.points], -1, (0, 255, 0), 3)
-            #cv2.imshow("Processed Image", self.processed_image)
-            #cv2.waitKey(1)
+            self.processed_image = image.copy()
+            for c in contours:
+                cv2.drawContours(self.processed_image, [c.points], -1, (0, 255, 0), 3)
+            cv2.imshow("Processed Image", self.processed_image)
+            cv2.waitKey(1)
             # end Debug
 
             satisfy = proportion_handler.does_contours_satisfy_proportions(contours)

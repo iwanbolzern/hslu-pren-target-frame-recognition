@@ -88,6 +88,9 @@ class ImageProcessing:
         pass
 
     def get_possible_contours(self, cntrs, hierarchy):
+        if hierarchy is None:
+            return []
+
         tree = Tree(hierarchy)
         possible_contours = []
         for leave in tree.leaves:
@@ -105,20 +108,20 @@ class ImageProcessing:
         return possible_contours
 
     def show_all_images(self):
-        tmp_img_row1 = np.concatenate((cv2.cvtColor(self.grey_scale_image, cv2.COLOR_GRAY2RGB),
-                                       cv2.cvtColor(self.grey_blur_image, cv2.COLOR_GRAY2RGB)), axis=1)
-        tmp_img_row1 = np.concatenate((tmp_img_row1,
-                                       cv2.cvtColor(self.black_white_image, cv2.COLOR_GRAY2RGB)), axis=1)
-        tmp_img_row2 = np.concatenate((cv2.cvtColor(self.edged_image, cv2.COLOR_GRAY2RGB),
-                                       self.processed_image), axis=1)
-
-        new_shape = tmp_img_row1.shape
-        shape_diff = np.array(new_shape) - np.array(tmp_img_row2.shape)
-        tmp_img_row2 = np.lib.pad(tmp_img_row2, ((0, shape_diff[0]), (0, shape_diff[1]), (0, shape_diff[2])),
-                           'constant', constant_values=(0))
-
-        tmp_img = np.concatenate((tmp_img_row1, tmp_img_row2), axis=0)
-        cv2.imshow("Debug Window", cv2.resize(tmp_img, (1200, 800)))
+        # tmp_img_row1 = np.concatenate((cv2.cvtColor(self.grey_scale_image, cv2.COLOR_GRAY2RGB),
+        #                                cv2.cvtColor(self.grey_blur_image, cv2.COLOR_GRAY2RGB)), axis=1)
+        # tmp_img_row1 = np.concatenate((tmp_img_row1,
+        #                                cv2.cvtColor(self.black_white_image, cv2.COLOR_GRAY2RGB)), axis=1)
+        # tmp_img_row2 = np.concatenate((cv2.cvtColor(self.edged_image, cv2.COLOR_GRAY2RGB),
+        #                                self.processed_image), axis=1)
+        #
+        # new_shape = tmp_img_row1.shape
+        # shape_diff = np.array(new_shape) - np.array(tmp_img_row2.shape)
+        # tmp_img_row2 = np.lib.pad(tmp_img_row2, ((0, shape_diff[0]), (0, shape_diff[1]), (0, shape_diff[2])),
+        #                    'constant', constant_values=(0))
+        #
+        # tmp_img = np.concatenate((tmp_img_row1, tmp_img_row2), axis=0)
+        #cv2.imshow("Debug Window", cv2.resize(tmp_img, (1200, 800)))
 
         # cv2.imshow('Grey Scale Image', self.grey_scale_image)
         # cv2.imshow('Grey Blur Image', self.grey_blur_image)

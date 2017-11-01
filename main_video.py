@@ -10,7 +10,8 @@ from typing import List, Tuple
 
 from image_processing.image_processing import ImageProcessing
 
-cap = cv2.VideoCapture("test_movies/high_res_slow.MOV")  # Webcam Capture
+#cap = cv2.VideoCapture("test_movies/high_res_slow.MOV")  # Webcam Capture
+cap = cv2.VideoCapture("test_movies/high_res_slow.avi")  # Webcam Capture
 
 while True:
     ret, image = cap.read()

@@ -10,7 +10,7 @@ class Contour:
         self._area = None
 
     @property
-    def center(self) -> Tuple[float, float]:
+    def center(self) -> Tuple[int, int]:
         if not self._center:
             M = cv2.moments(self._points)
             self._center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))

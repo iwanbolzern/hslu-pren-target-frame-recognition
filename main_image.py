@@ -3,7 +3,7 @@ import cv2
 from image_processing.image_processing import ImageProcessing
 
 # load the image
-image = cv2.imread('test_images/landing_field_2.jpg')
+image = cv2.imread('test_images/landing_field_grayscale.jpg')
 
 image_processing = ImageProcessing()
 image_processing.process_image(image)

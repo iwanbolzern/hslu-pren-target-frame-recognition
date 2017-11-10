@@ -10,6 +10,7 @@ from image_processing.image_processing import ImageProcessing
 camera = PiCamera()
 camera.resolution = (640, 480)
 camera.framerate = 32
+camera.color_effects = (128, 128)
 rawCapture = PiRGBArray(camera, size=(640, 480))
 
 # allow the camera to warmup

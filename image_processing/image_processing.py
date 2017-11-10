@@ -14,9 +14,9 @@ from image_processing.generic import Generic
 
 # load the image
 from image_processing.proportion_handler import ProportionHandler
+from utils.live_stream import LiveStream
 
 image = cv2.imread('landing_field_2.jpg')
-
 
 class ImageProcessing:
 
@@ -25,6 +25,10 @@ class ImageProcessing:
         self.grey_scale_image = None
         self.black_white_image = None
         self.processed_image = None
+
+        # start livestream
+        self.live_stream = LiveStream()
+        self.live_stream.start()
 
     def process_image(self, image):
         # convert the image to grayscale, blur it
@@ -80,6 +84,7 @@ class ImageProcessing:
         #    cv2.waitKey(0)
         # end Debug
 
+        self.live_stream.send_frame(self._create_debug_window())
         return False, None
 
     def check_for_for_corners(self):
@@ -112,16 +117,7 @@ class ImageProcessing:
         return possible_contours
 
     def show_all_images(self):
-        tmp_img_row1 = np.concatenate((cv2.cvtColor(self.grey_scale_image, cv2.COLOR_GRAY2RGB),
-                                       cv2.cvtColor(self.black_white_image, cv2.COLOR_GRAY2RGB)), axis=1)
-        tmp_img_row2 = self.processed_image
-
-        new_shape = tmp_img_row1.shape
-        shape_diff = np.array(new_shape) - np.array(tmp_img_row2.shape)
-        tmp_img_row2 = np.lib.pad(tmp_img_row2, ((0, shape_diff[0]), (0, shape_diff[1]), (0, shape_diff[2])),
-                           'constant', constant_values=(0))
-
-        tmp_img = np.concatenate((tmp_img_row1, tmp_img_row2), axis=0)
+        tmp_img = self._create_debug_window()
         cv2.imshow("Debug Window", cv2.resize(tmp_img, (1200, 800)))
 
         # cv2.imshow('Grey Scale Image', self.grey_scale_image)
@@ -129,3 +125,15 @@ class ImageProcessing:
         # cv2.imshow('Black White Image', self.black_white_image)
         # cv2.imshow('Edged Image', self.edged_image)
         cv2.imshow('Prozessed Image', self.processed_image)
+
+    def _create_debug_window(self):
+        tmp_img_row1 = np.concatenate((cv2.cvtColor(self.grey_scale_image, cv2.COLOR_GRAY2RGB),
+                                       cv2.cvtColor(self.black_white_image, cv2.COLOR_GRAY2RGB)), axis=1)
+        tmp_img_row2 = self.processed_image
+
+        new_shape = tmp_img_row1.shape
+        shape_diff = np.array(new_shape) - np.array(tmp_img_row2.shape)
+        tmp_img_row2 = np.lib.pad(tmp_img_row2, ((0, shape_diff[0]), (0, shape_diff[1]), (0, shape_diff[2])),
+                                  'constant', constant_values=(0))
+
+        return np.concatenate((tmp_img_row1, tmp_img_row2), axis=0)

@@ -5,6 +5,8 @@ from threading import Event
 from typing import Callable
 
 import cv2
+from picamera.array import PiRGBArray
+from picamera import PiCamera
 
 from image_processing.image_processing import ImageProcessing
 
@@ -16,9 +18,12 @@ class TargetRecognition:
         self.run_pool = ThreadPoolExecutor()
         self.run_future = None
         self.stop_interrupt = None
-
-        # init camera
-        self.cap = cv2.VideoCapture(0)  # Webcam Capture
+        # initialize the camera and grab a reference to the raw camera capture
+        self.camera = PiCamera()
+        self.camera.resolution = (640, 480)
+        self.camera.framerate = 32
+        self.camera.color_effects = (128, 128)
+        self.rawCapture = PiRGBArray(self.camera, size=(640, 480))
 
         # allow the camera to warmup
         time.sleep(0.1)
@@ -32,8 +37,10 @@ class TargetRecognition:
 
     def run(self):
         # capture frames from the camera
-        while True:
-            ret, image = self.cap.read()
+        for frame in self.camera.capture_continuous(self.rawCapture, format="bgr", use_video_port=True):
+            # grab the raw NumPy array representing the image, then initialize the timestamp
+            # and occupied/unoccupied text
+            image = frame.array
 
             success, centroid = self.image_processing.process_image(image)
 

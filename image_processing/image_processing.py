@@ -16,7 +16,6 @@ from image_processing.generic import Generic
 from image_processing.proportion_handler import ProportionHandler
 from utils.live_stream import LiveStream
 
-image = cv2.imread('landing_field_2.jpg')
 
 class ImageProcessing:
 

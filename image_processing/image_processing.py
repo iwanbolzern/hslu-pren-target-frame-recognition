@@ -43,8 +43,8 @@ class ImageProcessing:
         self.processed_image = image.copy()
         for c in contours:
             cv2.drawContours(self.processed_image, [c.points], -1, (0, 255, 0), 3)
-        cv2.imshow("All contours Image", self.processed_image)
-        cv2.waitKey(1)
+        #cv2.imshow("All contours Image", self.processed_image)
+        #cv2.waitKey(1)
         # end Debug
 
         possible_contours = self.get_possible_contours(contours, hierarchy)
@@ -52,11 +52,11 @@ class ImageProcessing:
         proportion_handler = ProportionHandler(4)
         for contours in possible_contours:
             # Debug
-            self.processed_image = image.copy()
-            for c in contours:
-                cv2.drawContours(self.processed_image, [c.points], -1, (0, 255, 0), 3)
-            cv2.imshow("Processed Image", self.processed_image)
-            cv2.waitKey(1)
+            #self.processed_image = image.copy()
+            #for c in contours:
+            #    cv2.drawContours(self.processed_image, [c.points], -1, (0, 255, 0), 3)
+            #cv2.imshow("Processed Image", self.processed_image)
+            #cv2.waitKey(1)
             # end Debug
 
             satisfy = proportion_handler.does_contours_satisfy_proportions(contours)
@@ -71,6 +71,11 @@ class ImageProcessing:
                 for c in contours:
                     cv2.drawContours(self.processed_image, [c.points], -1, (0, 255, 0), 3)
                     cv2.circle(self.processed_image, c.center, 3, (0, 0, 255), thickness=1, lineType=8, shift=0)
+
+                # Debug
+                cv2.imshow("Processed Image", self.processed_image)
+                cv2.waitKey(1)
+                # End Debug
 
                 return True, centroid
 

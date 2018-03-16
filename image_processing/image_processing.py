@@ -30,6 +30,10 @@ class ImageProcessing:
         #self.live_stream.start()
 
     def process_image(self, image):
+        # Debug raw image
+        cv2.imshow('Prozessed Image', image)
+        cv2.waitKey(1)
+
         # convert the image to grayscale, blur it
         self.processed_image = image.copy()
         self.grey_scale_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -41,8 +45,8 @@ class ImageProcessing:
         contours = [Contour(contour) for contour in contours]
         # Debug
         self.processed_image = image.copy()
-        for c in contours:
-            cv2.drawContours(self.processed_image, [c.points], -1, (0, 255, 0), 3)
+        #for c in contours:
+        #    cv2.drawContours(self.processed_image, [c.points], -1, (0, 255, 0), 3)
         #cv2.imshow("All contours Image", self.processed_image)
         #cv2.waitKey(1)
         # end Debug

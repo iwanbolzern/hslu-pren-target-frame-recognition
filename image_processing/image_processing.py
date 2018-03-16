@@ -26,8 +26,8 @@ class ImageProcessing:
         self.processed_image = None
 
         # start livestream
-        self.live_stream = LiveStream()
-        self.live_stream.start()
+        #self.live_stream = LiveStream()
+        #self.live_stream.start()
 
     def process_image(self, image):
         # convert the image to grayscale, blur it
@@ -83,7 +83,7 @@ class ImageProcessing:
         #    cv2.waitKey(0)
         # end Debug
 
-        self.live_stream.send_frame(self._create_debug_window())
+        #self.live_stream.send_frame(self._create_debug_window())
         return False, None
 
     def check_for_for_corners(self):
@@ -117,7 +117,7 @@ class ImageProcessing:
 
     def show_all_images(self):
         tmp_img = self._create_debug_window()
-        cv2.imshow("Debug Window", cv2.resize(tmp_img, (1200, 800)))
+        #cv2.imshow("Debug Window", cv2.resize(tmp_img, (1200, 800)))
 
         # cv2.imshow('Grey Scale Image', self.grey_scale_image)
         # cv2.imshow('Grey Blur Image', self.grey_blur_image)

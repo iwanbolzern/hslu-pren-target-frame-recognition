@@ -31,7 +31,7 @@ class ImageProcessing:
 
     def process_image(self, image):
         # Debug raw image
-        cv2.imshow('Prozessed Image', image)
+        cv2.imshow('Orginal image', image)
         cv2.waitKey(1)
 
         # convert the image to grayscale, blur it

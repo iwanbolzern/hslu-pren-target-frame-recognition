@@ -29,6 +29,7 @@ class TargetRecognition:
         if not self.run_future:
             self.stop_interrupt = Event()
             self.run_future = self.run_pool.submit(self.run)
+            self.run_future.add_done_callback(lambda future: print(future.result()))
 
     def run(self):
         # capture frames from the camera
@@ -38,7 +39,8 @@ class TargetRecognition:
             success, centroid = self.image_processing.process_image(image)
 
             if success:
-                map(lambda cb: cb(centroid[0], centroid[1]), self.centroid_callback)
+                for callback in self.centroid_callback:
+                    callback(centroid[0], centroid[1])
 
             # clear the stream in preparation for the next frame
             self.rawCapture.truncate(0)

@@ -1,10 +1,10 @@
 # import the necessary packages
+from datetime import datetime
 import time
 from concurrent.futures import ThreadPoolExecutor
 from threading import Event
 from typing import Callable
 
-import cv2
 from picamera.array import PiRGBArray
 from picamera import PiCamera
 
@@ -43,7 +43,7 @@ class TargetRecognition:
             image = frame.array
 
             success, centroid = self.image_processing.process_image(image)
-
+            print('{} Image processed {} {}'.format(datetime.now(), success, centroid))
             if success:
                 map(lambda cb: cb(centroid[0], centroid[1]), self.centroid_callback)
 

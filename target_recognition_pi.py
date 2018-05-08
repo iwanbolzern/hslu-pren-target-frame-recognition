@@ -45,7 +45,8 @@ class TargetRecognition:
             success, centroid = self.image_processing.process_image(image)
             print('{} Image processed {} {}'.format(datetime.now(), success, centroid))
             if success:
-                map(lambda cb: cb(centroid[0], centroid[1]), self.centroid_callback)
+                for callback in self.centroid_callback:
+                    callback(centroid[0], centroid[1])
 
             # clear the stream in preparation for the next frame
             self.rawCapture.truncate(0)

@@ -21,6 +21,7 @@ class ProportionHandler:
     def does_contours_satisfy_proportions(self, contours: List[Contour]):
         prop_vec = self._create_proportion_vec([contour.area for contour in contours])
         score = self._calc_prop_scores(prop_vec)
+        print('Contour score: {}'.format(str(score)))
         return score >= self.score_threshold
 
     def _create_proportion_table(self, props: List[float]) -> List[List[float]]:

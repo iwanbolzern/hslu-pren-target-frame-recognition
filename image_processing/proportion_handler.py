@@ -15,7 +15,7 @@ class ProportionHandler:
         self.score_threshold = score_threshold
 
         # create comparision proportion matrix
-        self.landing_field_proportions = [100, 74.8, 53.25, 35.35, 21.1, 10.52]
+        self.landing_field_proportions = [100, 70.34, 45.8, 26.6, 12.59, 3.8]
         self.mx = self._create_proportion_table(self.landing_field_proportions)
 
     def does_contours_satisfy_proportions(self, contours: List[Contour]):

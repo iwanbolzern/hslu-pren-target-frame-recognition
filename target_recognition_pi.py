@@ -56,7 +56,6 @@ class TargetRecognition:
 
     def stop(self):
         self.stop_interrupt.set()
-        self.run_future.result()
         self.run_future = None
 
     def register_callback(self, callback: Callable[[int, int], None]):

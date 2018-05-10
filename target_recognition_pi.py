@@ -18,6 +18,11 @@ class TargetRecognition:
         self.run_pool = ThreadPoolExecutor()
         self.run_future = None
         self.stop_interrupt = None
+        self.camera = None
+
+        self.image_processing = ImageProcessing()
+
+    def init_camera(self):
         # initialize the camera and grab a reference to the raw camera capture
         self.camera = PiCamera()
         self.camera.resolution = (640, 480)
@@ -28,10 +33,9 @@ class TargetRecognition:
         # allow the camera to warmup
         time.sleep(0.1)
 
-        self.image_processing = ImageProcessing()
-
     def start(self):
         if not self.run_future:
+            self.init_camera()
             self.stop_interrupt = Event()
             self.run_future = self.run_pool.submit(self.run)
             self.run_future.add_done_callback(lambda future: print(future.result()))
@@ -56,6 +60,7 @@ class TargetRecognition:
                 break
 
     def stop(self):
+        self.camera.close()
         self.stop_interrupt.set()
         self.run_future = None
 

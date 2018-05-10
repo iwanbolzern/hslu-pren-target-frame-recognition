@@ -20,6 +20,8 @@ class TargetRecognition:
         self.stop_interrupt = None
         self.camera = None
 
+        self.init_camera()
+
         self.image_processing = ImageProcessing()
 
     def init_camera(self):
@@ -35,7 +37,6 @@ class TargetRecognition:
 
     def start(self):
         if not self.run_future:
-            self.init_camera()
             self.stop_interrupt = Event()
             self.run_future = self.run_pool.submit(self.run)
             self.run_future.add_done_callback(lambda future: print(future.result()))

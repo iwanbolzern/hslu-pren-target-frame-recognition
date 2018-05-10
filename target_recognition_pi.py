@@ -61,7 +61,10 @@ class TargetRecognition:
                 break
 
     def stop(self):
-        self.camera.close()
+        try:
+            self.camera.close()
+        except Exception as ex:
+            pass
         self.stop_interrupt.set()
         self.run_future = None
 

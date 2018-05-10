@@ -40,7 +40,7 @@ class ImageProcessing:
         #self.processed_image = image.copy()
         # end Debug
         self.grey_scale_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        self.black_white_image = cv2.adaptiveThreshold(self.grey_scale_image, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 101, 7)
+        self.black_white_image = cv2.adaptiveThreshold(self.grey_scale_image, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 101, 7)
 
         # find contours
         # get all contours which are nested into each other. hierarchy  [Next, Previous, First_Child, Parent]

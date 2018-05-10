@@ -21,7 +21,7 @@ class TargetRecognition:
         # initialize the camera and grab a reference to the raw camera capture
         self.camera = PiCamera()
         self.camera.resolution = (640, 480)
-        self.camera.framerate = 32
+        self.camera.framerate = 10
         self.camera.color_effects = (128, 128)
         self.rawCapture = PiRGBArray(self.camera, size=(640, 480))
 
@@ -34,6 +34,7 @@ class TargetRecognition:
         if not self.run_future:
             self.stop_interrupt = Event()
             self.run_future = self.run_pool.submit(self.run)
+            self.run_future.add_done_callback(lambda future: print(future.result()))
 
     def run(self):
         # capture frames from the camera

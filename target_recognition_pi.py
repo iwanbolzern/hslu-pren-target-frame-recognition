@@ -52,7 +52,7 @@ class TargetRecognition:
             print('{} Image processed {} {}'.format(datetime.now(), success, centroid))
             if success:
                 for callback in self.centroid_callback:
-                    callback(centroid[0], centroid[1])
+                    callback(centroid[1], centroid[0])  # Because camera is other way around
 
             # clear the stream in preparation for the next frame
             self.rawCapture.truncate(0)

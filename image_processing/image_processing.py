@@ -20,7 +20,7 @@ from utils.live_stream import LiveStream
 class ImageProcessing:
 
     def __init__(self):
-        self.min_max_contours = Generic(min=3, max=5)
+        self.min_max_contours = Generic(min=4, max=6)
         self.grey_scale_image = None
         self.black_white_image = None
         self.processed_image = None

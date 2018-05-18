@@ -29,6 +29,11 @@ class ImageProcessing:
         #self.live_stream = LiveStream()
         #self.live_stream.start()
 
+    def to_binary_img(self, image):
+        self.grey_scale_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        return cv2.adaptiveThreshold(self.grey_scale_image, 255, cv2.ADAPTIVE_THRESH_MEAN_C,
+                                                       cv2.THRESH_BINARY, 101, 7)
+
     def process_image(self, image):
         # Debug raw image
         #cv2.imshow('Orginal image', image)

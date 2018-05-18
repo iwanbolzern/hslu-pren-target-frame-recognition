@@ -105,3 +105,7 @@ class TargetRecognition:
 
     def unregister_callback(self, callback: Callable[[int, int], None]):
         self.centroid_callback.remove(callback)
+
+if __name__ == '__main__':
+    targetRec = TargetRecognition()
+    targetRec.start()

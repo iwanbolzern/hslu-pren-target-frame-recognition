@@ -42,14 +42,15 @@ class ImageProcessing:
 
         # convert the image to grayscale, blur it
         # Debug
-        #self.processed_image = image.copy()
+        self.processed_image = image.copy()
         # end Debug
         self.grey_scale_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        self.black_white_image = cv2.adaptiveThreshold(self.grey_scale_image, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 101, 7)
+        #self.black_white_image = cv2.adaptiveThreshold(self.grey_scale_image, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 101, 7)
 
         # find contours
         # get all contours which are nested into each other. hierarchy  [Next, Previous, First_Child, Parent]
-        (im2, contours, hierarchy) = cv2.findContours(self.black_white_image, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        edges = cv2.Canny(self.grey_scale_image, 100, 200)
+        (im2, contours, hierarchy) = cv2.findContours(edges, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         contours = [Contour(contour) for contour in contours]
         # Debug
         #self.processed_image = image.copy()
@@ -96,7 +97,7 @@ class ImageProcessing:
         #    for c in contours:
         #        cv2.drawContours(self.processed_image, [c.points], -1, (0, 255, 0), 3)
         #    cv2.imshow("Processed Image", self.processed_image)
-        #    cv2.waitKey(0)
+        #    cv2.waitKey(1)
         # end Debug
 
         #self.live_stream.send_frame(self._create_debug_window())

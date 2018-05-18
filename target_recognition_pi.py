@@ -34,7 +34,7 @@ class TargetRecognition:
     def init_camera(self):
         # initialize the camera and grab a reference to the raw camera capture
         self.camera = PiCamera()
-        self.camera.resolution = (640, 480)
+        self.camera.resolution = (400, 400)
         self.camera.framerate = 20
         self.camera.color_effects = (128, 128)
         self.rawCapture = PiRGBArray(self.camera, size=(640, 480))
@@ -77,7 +77,7 @@ class TargetRecognition:
             print('{} Image processed {} {}'.format(datetime.now(), success, centroid))
             if success:
                 for callback in self.centroid_callback:
-                    callback(480 - centroid[1], centroid[0])  # Because camera is other way around
+                    callback(centroid[1], centroid[0])  # Because camera is other way around
 
     def __close_camera(self, future):
         print(future.result())

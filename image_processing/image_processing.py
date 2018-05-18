@@ -20,7 +20,7 @@ from utils.live_stream import LiveStream
 class ImageProcessing:
 
     def __init__(self):
-        self.min_max_contours = Generic(min=4, max=6)
+        self.min_max_contours = Generic(min=3, max=3)
         self.grey_scale_image = None
         self.black_white_image = None
         self.processed_image = None
@@ -45,12 +45,11 @@ class ImageProcessing:
         self.processed_image = image.copy()
         # end Debug
         self.grey_scale_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        #self.black_white_image = cv2.adaptiveThreshold(self.grey_scale_image, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 101, 7)
+        self.black_white_image = cv2.adaptiveThreshold(self.grey_scale_image, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 41, 7)
 
         # find contours
         # get all contours which are nested into each other. hierarchy  [Next, Previous, First_Child, Parent]
-        edges = cv2.Canny(self.grey_scale_image, 100, 200)
-        (im2, contours, hierarchy) = cv2.findContours(edges, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        (im2, contours, hierarchy) = cv2.findContours(self.black_white_image, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         contours = [Contour(contour) for contour in contours]
         # Debug
         #self.processed_image = image.copy()
@@ -62,7 +61,7 @@ class ImageProcessing:
 
         possible_contours = self.get_possible_contours(contours, hierarchy)
 
-        proportion_handler = ProportionHandler(4)
+        proportion_handler = ProportionHandler(2)
         for contours in possible_contours:
             # Debug
             #self.processed_image = image.copy()

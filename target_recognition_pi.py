@@ -37,7 +37,7 @@ class TargetRecognition:
         self.camera.resolution = (400, 400)
         self.camera.framerate = 20
         self.camera.color_effects = (128, 128)
-        self.rawCapture = PiRGBArray(self.camera, size=(640, 480))
+        self.rawCapture = PiRGBArray(self.camera, size=(400, 400))
 
         # allow the camera to warmup
         time.sleep(0.1)

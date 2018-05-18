@@ -67,10 +67,12 @@ class TargetRecognition:
                 break
 
     def run(self):
+        # wait for image
+        while self.current_image is None:
+            time.sleep(0.001)
+
         # capture frames from the camera
         while not self.stop_interrupt.is_set():
-            if not self.current_image:
-                continue
             success, centroid = self.image_processing.process_image(self.current_image)
             print('{} Image processed {} {}'.format(datetime.now(), success, centroid))
             if success:

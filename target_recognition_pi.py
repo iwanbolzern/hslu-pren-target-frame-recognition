@@ -45,6 +45,9 @@ class TargetRecognition:
     def start(self):
         if not self.run_future:
             self.stop_interrupt = Event()
+            future = self.run_pool.submit(self.__run_capture_thread)
+            future.add_done_callback(self.__close_camera)
+
             self.run_future = self.run_pool.submit(self.run)
             self.run_future.add_done_callback(lambda future: print(future.result()))
 
@@ -62,9 +65,6 @@ class TargetRecognition:
                 break
 
     def run(self):
-        future = self.run_pool.submit(self.__run_capture_thread)
-        future.add_done_callback(self.__close_camera)
-
         # capture frames from the camera
         while not self.stop_interrupt.is_set():
             success, centroid = self.image_processing.process_image(self.current_image)

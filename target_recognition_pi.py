@@ -61,12 +61,16 @@ class TargetRecognition:
             # clear the stream in preparation for the next frame
             self.rawCapture.truncate(0)
 
+            print('Image captured')
+
             if self.stop_interrupt.is_set():
                 break
 
     def run(self):
         # capture frames from the camera
         while not self.stop_interrupt.is_set():
+            if not self.current_image:
+                continue
             success, centroid = self.image_processing.process_image(self.current_image)
             print('{} Image processed {} {}'.format(datetime.now(), success, centroid))
             if success:

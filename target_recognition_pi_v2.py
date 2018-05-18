@@ -83,7 +83,10 @@ class TargetRecognition:
 
         # capture frames from the camera
         while not self.stop_interrupt.is_set():
-            success, centroid = self.image_processing.process_image(self.binary_queue_out)
+            array = []
+            for i in range(len(self.binary_queue_out)):
+                array.append(self.binary_queue_out[i])
+            success, centroid = self.image_processing.process_image(array)
             print('{} Image processed {} {}'.format(datetime.now(), success, centroid))
             if success:
                 for callback in self.centroid_callback:

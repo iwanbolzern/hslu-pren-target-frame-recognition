@@ -1,10 +1,14 @@
 # import the necessary packages
+import copy
 from datetime import datetime
 import time
 from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 from multiprocessing import Queue
 from threading import Event
 from typing import Callable
+
+import numpy as np
+import cv2
 
 from picamera.array import PiRGBArray
 from picamera import PiCamera
@@ -62,6 +66,7 @@ class TargetRecognition:
             self.rawCapture.truncate(0)
 
             print('Image captured')
+            self.__print_pixel_mm_calibration()
 
             if self.stop_interrupt.is_set():
                 break
@@ -78,6 +83,13 @@ class TargetRecognition:
             if success:
                 for callback in self.centroid_callback:
                     callback(centroid[1], centroid[0])  # Because camera is other way around
+
+    def __print_pixel_mm_calibration(self):
+        tmp_img = copy.deepcopy(self.current_image)
+        cv2.line(tmp_img, (0, 200), (100, 200), (255, 0, 0), 5)
+        cv2.imshow("Calibration Image", tmp_img)
+        cv2.waitKey(1)
+
 
     def __close_camera(self, future):
         print(future.result())

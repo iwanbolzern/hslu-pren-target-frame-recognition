@@ -1,5 +1,5 @@
 import unittest
-import image_processing
+from src import image_processing
 
 
 class ProportionHandlerTest(unittest.TestCase):

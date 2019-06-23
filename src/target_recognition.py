@@ -1,4 +1,3 @@
-# import the necessary packages
 import time
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
@@ -7,7 +6,7 @@ from typing import Callable
 
 import cv2
 
-from image_processing.image_processing import ImageProcessing
+from src.image_processing import ImageProcessing
 
 
 class TargetRecognition:

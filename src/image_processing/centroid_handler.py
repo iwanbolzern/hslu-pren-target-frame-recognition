@@ -1,9 +1,6 @@
-import cv2
-from collections import defaultdict
-
-from copy import deepcopy
-from sklearn.neighbors import NearestNeighbors
 from typing import Tuple, List
+
+from sklearn.neighbors import NearestNeighbors
 
 
 def get_n_neighbours_below_delta(centers: List[Tuple[int, int]], n: int, threshold: float):
@@ -16,7 +13,7 @@ def get_n_neighbours_below_delta(centers: List[Tuple[int, int]], n: int, thresho
     nbrs = NearestNeighbors(n_neighbors=n).fit([center[1] for center in centers])
     distances, indices = nbrs.kneighbors([center[1] for center in centers])
 
-    threshold = 40;
+    threshold = 40
 
     possible_candidates = []
     index_matrix = []
@@ -28,7 +25,7 @@ def get_n_neighbours_below_delta(centers: List[Tuple[int, int]], n: int, thresho
 
 
 def does_matrix_contains(index_matrix, index_vec_to_check):
-    index_vec_to_check = sorted(index_vec_to_check) # it is order independend
+    index_vec_to_check = sorted(index_vec_to_check)  # it is order independend
     for i in range(len(index_matrix)):
         if are_vectors_equal(index_vec_to_check, index_matrix[i]):
             return True

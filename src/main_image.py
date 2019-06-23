@@ -1,6 +1,6 @@
 import cv2
 
-from image_processing.image_processing import ImageProcessing
+from src.image_processing import ImageProcessing
 
 # load the image
 image = cv2.imread('test_images/landing_field_grayscale.jpg')

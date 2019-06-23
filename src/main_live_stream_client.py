@@ -1,7 +1,8 @@
-import cv2
 import time
 
-from utils.live_stream_client import LiveStreamClient
+import cv2
+
+from src.utils.live_stream_client import LiveStreamClient
 
 
 def show_image(frame):

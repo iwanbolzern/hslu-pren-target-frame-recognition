@@ -1,10 +1,10 @@
-# import the necessary packages
 import time
-import cv2
-from picamera.array import PiRGBArray
-from picamera import PiCamera
 
-from image_processing.image_processing import ImageProcessing
+import cv2
+from picamera import PiCamera
+from picamera.array import PiRGBArray
+
+from src.image_processing import ImageProcessing
 
 # initialize the camera and grab a reference to the raw camera capture
 camera = PiCamera()

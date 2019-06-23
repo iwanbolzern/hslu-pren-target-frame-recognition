@@ -1,8 +1,7 @@
 import sys
-
 from datetime import datetime
 
-from target_recognition_pi import TargetRecognition
+from src.target_recognition import TargetRecognition
 
 if __name__ == '__main__':
 
@@ -11,7 +10,8 @@ if __name__ == '__main__':
         sys.stdout.flush()
 
 
-    print('{}: Target detected with centroid: {}, {}'.format(datetime.now(), 5, 6))
     target_recognition = TargetRecognition()
     target_recognition.register_callback(offest_received)
     target_recognition.start()
+
+    input()

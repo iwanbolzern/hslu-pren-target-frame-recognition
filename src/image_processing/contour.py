@@ -1,5 +1,6 @@
-import cv2
 from typing import Tuple, List
+
+import cv2
 
 
 class Contour:

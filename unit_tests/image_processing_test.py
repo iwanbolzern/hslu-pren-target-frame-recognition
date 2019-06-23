@@ -1,5 +1,5 @@
 import unittest
-from image_processing.image_processing import Tree
+from src.image_processing import Tree
 
 
 class ImageProcessingTest(unittest.TestCase):

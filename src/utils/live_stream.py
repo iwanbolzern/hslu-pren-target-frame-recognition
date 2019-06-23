@@ -1,8 +1,8 @@
+import pickle
 import socket
+import struct
 from threading import Thread
 
-import pickle
-import struct
 
 class LiveStream:
 

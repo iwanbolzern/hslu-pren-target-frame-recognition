@@ -1,7 +1,7 @@
-### This code below should be in a separate file called imutils.py
-# Import the necessary packages
-import numpy as np
 import cv2
+import numpy as np
+
+
 def translate(image, x, y):
         # Define the translation matrix and perform the translation
         M = np.float32([[1, 0, x], [0, 1, y]])

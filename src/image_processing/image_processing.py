@@ -1,20 +1,11 @@
+import cv2
 import numpy as np
 
-
-from collections import defaultdict
-from scipy import ndimage
-import cv2
-from operator import itemgetter
-from typing import List, Tuple
-
-from image_processing import centroid_handler
-from image_processing.contour import Contour
-from image_processing.hierarchy_tree import Tree
-from image_processing.generic import Generic
-
+from src.image_processing import Contour
+from src.image_processing import Generic
 # load the image
-from image_processing.proportion_handler import ProportionHandler
-from utils.live_stream import LiveStream
+from src.image_processing import ProportionHandler
+from src.image_processing import Tree
 
 
 class ImageProcessing:
